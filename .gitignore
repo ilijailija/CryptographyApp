@@ -1,0 +1,38 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.aps
+*.qtvscr
+*.ncb
+*.sdf
+*.VC.db
+*.VC.opendb
+ipch/
+
+# Build output
+x64/
+x86/
+Debug/
+Release/
+*.obj
+*.pdb
+*.ilk
+*.exe
+*.log
+*.tlog
+
+# Resource compiler temp files (random names like RCa19660, RDa19660)
+RC[a-z][0-9]*
+RD[a-z][0-9]*
+
+# Qt generated files
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+GeneratedFiles/
+QtMsBuild/
+
+# NOTE: ui_*.h are intentionally NOT ignored. The .ui files are not
+# registered as QtUic items in CryptoProject.vcxproj, so the build does not
+# regenerate them. Add the .ui files as QtUic items first, then you can ignore ui_*.h.

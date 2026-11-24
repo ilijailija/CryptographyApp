@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup>
     <EnableQt>true</EnableQt>
-    <QtVersion>6.9.1</QtVersion>
-    <QtInstallDir>C:\Qt\6.9.1\msvc2022_64</QtInstallDir>
+    <QtVersion>6.9.3</QtVersion>
+    <QtInstallDir>C:\Qt\6.9.3\msvc2022_64</QtInstallDir>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -126,7 +126,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;C:\Qt\6.9.1\msvc2022_64\include\QtWidgets;C:\Qt\6.9.1\msvc2022_64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;C:\Qt\6.9.3\msvc2022_64\include\QtWidgets;C:\Qt\6.9.3\msvc2022_64\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -137,7 +137,7 @@
       <AdditionalDependencies>ws2_32.lib;Qt6Widgets.lib
 ;Qt6Core.lib
 ;Qt6Gui.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>Qt6Widgets.lib;Qt6Gui.lib;Qt6Core.lib;C:\Qt\6.9.1\msvc2022_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>Qt6Widgets.lib;Qt6Gui.lib;Qt6Core.lib;C:\Qt\6.9.3\msvc2022_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,14 +149,14 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>C:\Qt\6.9.1\msvc2022_64\include\QtWidgets;C:\Qt\6.9.1\msvc2022_64\include\QtGui;C:\Qt\6.9.1\msvc2022_64\include\QtCore;C:\Qt\6.9.1\msvc2022_64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Qt\6.9.3\msvc2022_64\include\QtWidgets;C:\Qt\6.9.3\msvc2022_64\include\QtGui;C:\Qt\6.9.3\msvc2022_64\include\QtCore;C:\Qt\6.9.3\msvc2022_64\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Qt\6.9.1\msvc2022_64\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Qt\6.9.3\msvc2022_64\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>Qt6Widgets.lib;Qt6Core.lib;Qt6Gui.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

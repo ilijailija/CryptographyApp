@@ -154,22 +154,18 @@ void mainWindow::onSendClicked() {
             file.close();
 
             std::string filenameStd = filename.toUtf8().constData();
-            fileSize = fileContent.size();
-            fileContentStd = fileContent.toUtf8().constData();
-            byteHash = new std::byte[msgHash.length()];
-            hashLength = msgHash.length();
-
-            for (int i = 0; i < msgHash.length(); i++)
-                byteHash[i] = std::byte(msgHash[i]);
-
             string encryptedMsg = encAlg->encrypt(fileContentStd);
             msgHash = GetMD5String(encryptedMsg);
+            hashLength = msgHash.length();
+            byteHash = new std::byte[hashLength];
+
+            for (int i = 0; i < hashLength; i++)
+                byteHash[i] = std::byte(msgHash[i]);
+            fileSize = encryptedMsg.size();
 
             initializeWSA();
-
             Client client;
             client.ConnectToServer(12345);
-            
             client.sendFileData(filenameStd, fileSize, hashLength, byteHash, encryptedMsg);
         }
     }

@@ -53,5 +53,5 @@ void Client::sendFileData(std::string fileName, long fileSize, int hashLenght, s
 	send(clientSocket, reinterpret_cast<const char*>(&fileSize), sizeof(fileSize), 0);//duzina fajla (long)
 	send(clientSocket, reinterpret_cast<const char*>(&hashLenght), sizeof(hashLenght), 0);//duzina hash-a (int)
 	send(clientSocket, reinterpret_cast<const char*>(hash), hashLenght, 0);// hash(byte[])
-	send(clientSocket, reinterpret_cast<const char*>(&encryptedMsg), encryptedMsg.length(), 0);//poruka(string)
+	send(clientSocket, encryptedMsg.c_str(), encryptedMsg.size(), 0);//poruka(string)
 }
