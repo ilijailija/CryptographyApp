@@ -11,6 +11,7 @@ class Client
 	SOCKET acceptSocket;
 public:
 	Client();
+	~Client();
 	void ConnectToServer(int port);
 	void Send(std::string message);
 	void Recieve();

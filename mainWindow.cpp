@@ -137,42 +137,44 @@ void mainWindow::onSendClicked() {
         "",
         tr("Text Files (*.txt)")
     );
-    QString fileContent;
-    string fileContentStd;
-    long fileSize;
-    string msgHash;
-    std::byte* byteHash;
-    int hashLength;
 
-
-    if (!filename.isEmpty()) {
-        QFile file(filename);
-
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream in(&file);
-            fileContent = in.readAll();
-            file.close();
-
-            std::string filenameStd = filename.toUtf8().constData();
-            string encryptedMsg = encAlg->encrypt(fileContentStd);
-            msgHash = GetMD5String(encryptedMsg);
-            hashLength = msgHash.length();
-            byteHash = new std::byte[hashLength];
-
-            for (int i = 0; i < hashLength; i++)
-                byteHash[i] = std::byte(msgHash[i]);
-            fileSize = encryptedMsg.size();
-
-            initializeWSA();
-            Client client;
-            client.ConnectToServer(12345);
-            client.sendFileData(filenameStd, fileSize, hashLength, byteHash, encryptedMsg);
-        }
-    }
-    else {
+    if (filename.isEmpty()) {
         qDebug() << "No file selected.";
+        return;
     }
 
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Cannot open file.";
+        return;
+    }
+    QTextStream in(&file);
+    QString fileContent = in.readAll();
+    file.close();
+
+    QString justName = QFileInfo(filename).fileName();
+    QString justName2 = filename.mid(filename.lastIndexOf('/') + 1);
+    QByteArray nameBytes = justName2.toUtf8();
+    std::string filenameStd(nameBytes.constData(), static_cast<size_t>(nameBytes.size()));
+
+    std::string fileContentStd = fileContent.toUtf8().constData();
+
+    std::string encryptedMsg = encAlg->encrypt(fileContentStd);   // 1. sifruj
+    std::string msgHash = GetMD5String(encryptedMsg);        // 2. hash sifrata
+
+    long fileSize = static_cast<long>(encryptedMsg.size());     // 3. velicina sifrata
+    int  hashLength = static_cast<int>(msgHash.length());         // 4. duzina hasha (32)
+
+    std::vector<std::byte> byteHash(hashLength);
+    for (int i = 0; i < hashLength; i++)
+        byteHash[i] = std::byte(msgHash[i]);
+
+    initializeWSA();
+    {
+        Client client;                      
+        client.ConnectToServer(12345);
+        client.sendFileData(filenameStd, fileSize, hashLength, byteHash.data(), encryptedMsg);
+    }
     cleanupWinsock();
 }
 void mainWindow::onRecieveClicked() {
@@ -182,14 +184,30 @@ void mainWindow::onRecieveClicked() {
     server.Listen();
     server.AcceptSocket();
     vector<string> fileContent = server.RecieveFileData();
+
+    if (fileContent.size() < 2) {
+        QMessageBox::warning(this, tr("Receive failed"),
+            tr("File was not received correctly (connection error or hash mismatch)."));
+        cleanupWinsock();
+        return;
+    }
+
     string fileName = fileContent[0];
     string encryptedMsg = fileContent[1];
 
 
     QString qFileName = QFileInfo(QString::fromStdString(fileName)).fileName();
+    QSettings settings;
+    QString qOutputDir = settings.value("outputDirectory", "").toString().trimmed();
 
-    QDir dir(QString::fromStdString(this->outputDir.string()));
+    if (qOutputDir.isEmpty() || qFileName.isEmpty()) {
+        QMessageBox::warning(this, tr("Cannot save file"),
+            tr("Output folder or file name is empty. Open Settings, choose an output folder and click Save."));
+        cleanupWinsock();
+        return;
+    }
 
+    QDir dir(qOutputDir);
     QString outputFilePath = dir.filePath(qFileName);
     qDebug() << "Final outputFilePath:" << outputFilePath;
 
@@ -220,6 +238,12 @@ void mainWindow::onSettingsClicked() {
     std::string stdOutputDir = qOutputDir.toUtf8().constData();
     std::replace(stdTargetDir.begin(), stdTargetDir.end(), '/', '\\');
     std::replace(stdOutputDir.begin(), stdOutputDir.end(), '/', '\\');
+
+    if (stdTargetDir.empty() || stdOutputDir.empty()) {
+        QMessageBox::warning(this, tr("Settings"),
+            tr("Choose both folders and click Save."));
+        return;
+    }
 
     this->targetDir = stdTargetDir;
     this->outputDir = stdOutputDir;

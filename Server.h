@@ -12,6 +12,7 @@ class Server
 	SOCKET acceptSocket;
 public:
 	Server();
+	~Server();
 	void BindSocket(int port);
 	void Listen();
 	void AcceptSocket();

@@ -1,4 +1,5 @@
 #include "Client.h"
+#include <string>
 Client::Client() {
 	clientSocket = INVALID_SOCKET;
 	clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -10,6 +11,11 @@ Client::Client() {
 		std::cout << "client socket is OK." << std::endl;
 	}
 }
+
+Client::~Client() {
+	if (clientSocket != INVALID_SOCKET) closesocket(clientSocket);
+}
+
 void Client::ConnectToServer(int port) {
 	sockaddr_in clientService;
 	clientService.sin_family = AF_INET;
@@ -48,10 +54,13 @@ SOCKET Client::getSocket() {
 }
 
 void Client::sendFileData(std::string fileName, long fileSize, int hashLenght, std::byte* hash, std::string encryptedMsg) {
+	OutputDebugStringA(("[sendFileData] name='" + fileName + "' len="
+		+ std::to_string(fileName.size()) + "\n").c_str());
+	
 	fileName += '\n';
 	send(clientSocket, fileName.c_str(), fileName.size(), 0); // ime fajla (string)
 	send(clientSocket, reinterpret_cast<const char*>(&fileSize), sizeof(fileSize), 0);//duzina fajla (long)
 	send(clientSocket, reinterpret_cast<const char*>(&hashLenght), sizeof(hashLenght), 0);//duzina hash-a (int)
 	send(clientSocket, reinterpret_cast<const char*>(hash), hashLenght, 0);// hash(byte[])
-	send(clientSocket, encryptedMsg.c_str(), encryptedMsg.size(), 0);//poruka(string)
+	send(clientSocket, encryptedMsg.data(), static_cast<int>(encryptedMsg.size()), 0);//poruka(string)
 }

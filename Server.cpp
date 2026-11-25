@@ -1,6 +1,19 @@
 #include "Server.h"
+#include <cstring>
+
+static bool recvAll(SOCKET s, char* buf, int len) {
+	int total = 0;
+	while (total < len) {
+		int n = recv(s, buf + total, len - total, 0);
+		if (n <= 0) return false; 
+		total += n;
+	}
+	return true;
+}
+
 Server::Server() {
 	serverSocket = INVALID_SOCKET;
+	acceptSocket = INVALID_SOCKET;
 
 	serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (serverSocket == INVALID_SOCKET) {
@@ -11,6 +24,12 @@ Server::Server() {
 		cout << "server socket is OK." << endl;
 	}
 }
+
+Server::~Server() {
+	if (acceptSocket != INVALID_SOCKET) closesocket(acceptSocket);
+	if (serverSocket != INVALID_SOCKET) closesocket(serverSocket);
+}
+
 void Server::BindSocket(int port) {
 	sockaddr_in service;
 	service.sin_family = AF_INET;
@@ -63,52 +82,53 @@ void Server::Send(string message) {
 }
 vector<string> Server::RecieveFileData() {
 	vector<string> err;
-	//1. fileName (string)
+
+	// 1. ime fajla do '\n'
 	string fileName;
 	char ch;
 	while (true) {
-		recv(acceptSocket, &ch, 1, 0);
-		if (ch == '\n')
-			break;
-		fileName += ch;
-	}
-	//2. fileSize (long)
-	long fileSize = 0;
-	recv(acceptSocket, reinterpret_cast<char*>(&fileSize), sizeof(long), 0);
-	//3. hashLength (int)
-	int hashLength = 0;
-	recv(acceptSocket, reinterpret_cast<char*>(&hashLength), sizeof(int), 0);
-	//4. hash(byte)
-	vector<std::byte> recievedHash(hashLength);
-	recv(acceptSocket, reinterpret_cast<char*>(recievedHash.data()), hashLength, 0);
-	//5. encrypted message
-	vector<char> encryptedBuffer(fileSize);
-	int totalRecieved = 0;
-	while (totalRecieved < fileSize) {
-		int received = recv(acceptSocket, encryptedBuffer.data() + totalRecieved, fileSize - totalRecieved, 0);
-		if (received <= 0) {
-			printf("Error while receiving encrypted data. Error: %d\n", WSAGetLastError());
+		if (!recvAll(acceptSocket, &ch, 1) || fileName.size() > 1024) {
+			cout << "Failed to receive file name." << endl;
 			return err;
 		}
-		totalRecieved += received;
+		if (ch == '\n') break;
+		fileName += ch;
+	}
+
+	// 2. velicina sifrata (sa ogranicenjem od 100 MB)
+	long fileSize = 0;
+	if (!recvAll(acceptSocket, reinterpret_cast<char*>(&fileSize), sizeof(fileSize))
+		|| fileSize < 0 || fileSize > 100L * 1024 * 1024) {
+		cout << "Invalid file size." << endl;
+		return err;
+	}
+
+	// 3. duzina hasha: MD5 u hex obliku je uvek 32 znaka
+	int hashLength = 0;
+	if (!recvAll(acceptSocket, reinterpret_cast<char*>(&hashLength), sizeof(hashLength))
+		|| hashLength != 32) {
+		cout << "Invalid hash length." << endl;
+		return err;
+	}
+
+	// 4. hash
+	vector<char> receivedHash(hashLength);
+	if (!recvAll(acceptSocket, receivedHash.data(), hashLength)) return err;
+
+	// 5. sifrat
+	vector<char> encryptedBuffer(fileSize);
+	if (!recvAll(acceptSocket, encryptedBuffer.data(), static_cast<int>(fileSize))) {
+		cout << "Error while receiving encrypted data." << endl;
+		return err;
 	}
 	string encryptedMsg(encryptedBuffer.begin(), encryptedBuffer.end());
-	std::string computedHash = GetMD5String(encryptedMsg);
 
-	bool hashOK = true;
-	for (int i = 0; i < hashLength; i++) {
-		if (std::byte(computedHash[i]) != recievedHash[i]) {
-			hashOK = false;
-			break;
-		}
-	}
-
-	if (!hashOK) {
+	string computedHash = GetMD5String(encryptedMsg);
+	if (computedHash.size() != static_cast<size_t>(hashLength)
+		|| memcmp(computedHash.data(), receivedHash.data(), hashLength) != 0) {
 		cout << "Hashes are different!" << endl;
 		return err;
 	}
-	vector<string> returnValue;
-	returnValue.push_back(fileName);
-	returnValue.push_back(encryptedMsg);
-	return returnValue;
+
+	return { fileName, encryptedMsg };
 }
