@@ -1,4 +1,5 @@
 #include "DoubleTranspositionCipher.h"
+#include <numeric>
 DoubleTranspositionCipher::DoubleTranspositionCipher(const vector<int>& rowKey, const vector<int>& colKey)
 	:keyRow(rowKey), keyCol(colKey){}
 
@@ -41,7 +42,13 @@ string DoubleTranspositionCipher::encrypt(const string& plaintext){
 	int numRows = keyRow.size();
 	int numCols = keyCol.size();
 
-	string rowTransposed = applyRowTransposition(plaintext, numRows);
+	size_t block = std::lcm(keyRow.size(), keyCol.size());
+	string padded = plaintext;
+	if (block > 0 && padded.size() % block != 0)
+		padded.append(block - padded.size() % block, ' ');
+
+	string rowTransposed = applyRowTransposition(padded, numRows);
+
 	return applyColumnTransposition(rowTransposed, numCols);
 }
 
