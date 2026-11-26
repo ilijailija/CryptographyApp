@@ -1,6 +1,6 @@
 #include "mainWindow.h"
 mainWindow::mainWindow(QWidget* parent)
-    : QMainWindow(parent),encAlg(nullptr) {
+    : QMainWindow(parent),encAlg(nullptr),fsw(nullptr) {
     ui.setupUi(this);  // Inicijalizacija UI-a
 
     this->setFixedSize(485, 345);
@@ -28,17 +28,12 @@ mainWindow::~mainWindow() {}
 
 void mainWindow::onDtClicked() {
 
-    DtKeyDialog* dtDialog = new DtKeyDialog(this);
-    if (dtDialog->exec() == QDialog::Accepted) {
-        vector<int> rowKey = dtDialog->getRowKey();
-        vector<int> colKey = dtDialog->getColKey();
+    DtKeyDialog dtDialog(this);
+    if (dtDialog.exec() != QDialog::Accepted)
+        return;
 
-        encAlg = new DoubleTranspositionCipher(rowKey, colKey);
-        fsw->setEncryptionStrategy(encAlg);
-    }
-    else {
-        QErrorMessage(this);
-    }
+    encAlg = new DoubleTranspositionCipher(dtDialog.getRowKey(), dtDialog.getColKey());
+    fsw->setEncryptionStrategy(encAlg);
 
     ui.pushButtonDT->setEnabled(false);
     ui.pushButtonA52->setEnabled(true);
@@ -51,15 +46,13 @@ void mainWindow::onDtClicked() {
    
 }
 void mainWindow::onA52Clicked() {
-    A52KeyDialog* a52Dialog = new A52KeyDialog(this);
-    if (a52Dialog->exec() == QDialog::Accepted) {
-        word frame = a52Dialog->getFrame();
-        uint8_t* key = a52Dialog->getKey();
+    A52KeyDialog a52Dialog(this);
+    if (a52Dialog.exec() != QDialog::Accepted)
+        return;
 
-        encAlg = new A52Wrapper(key, frame);
-        fsw->setEncryptionStrategy(encAlg);
-    }
-
+    encAlg = new A52Wrapper(a52Dialog.getKey(), a52Dialog.getFrame());
+    fsw->setEncryptionStrategy(encAlg);
+    
     ui.pushButtonA52->setEnabled(false);
     ui.pushButtonDT->setEnabled(true);
     ui.pushButtonCFB->setEnabled(true);
@@ -70,16 +63,18 @@ void mainWindow::onA52Clicked() {
     ui.buttonRecieve->setEnabled(true);
 }
 void mainWindow::onCfbClicked() {
-    CfbDialog* cfbDialog = new CfbDialog(this);
-    if (cfbDialog->exec() == QDialog::Accepted) {
-        word frame = cfbDialog->getFrame();
-        uint8_t* key = cfbDialog->getKey();
-        vector<uint8_t> iv = cfbDialog->getIv();
-        A52 a52(key, frame);
+    CfbDialog cfbDialog(this);
+    if (cfbDialog.exec() != QDialog::Accepted)
+        return;
 
-        encAlg = new CFB(a52,iv,iv.size());
-        fsw->setEncryptionStrategy(encAlg);
-    }
+    word frame = cfbDialog.getFrame();
+    uint8_t* key = cfbDialog.getKey();
+    vector<uint8_t> iv = cfbDialog.getIv();
+    A52 a52(key, frame);
+
+    encAlg = new CFB(a52,iv,iv.size());
+    fsw->setEncryptionStrategy(encAlg);
+
     ui.pushButtonCFB->setEnabled(false);
     ui.pushButtonDT->setEnabled(true);
     ui.pushButtonA52->setEnabled(true);
@@ -103,6 +98,21 @@ void mainWindow::onFswClicked() {
         ui.settingsButton->setEnabled(true);
     }
     else {
+        std::error_code ec;
+        std::filesystem::create_directories(outputDir, ec);
+
+        if (!std::filesystem::is_directory(targetDir, ec) ||
+            !std::filesystem::is_directory(outputDir, ec)) {
+            QMessageBox::warning(this, tr("FSW"),
+                tr("Input or output folder does not exist."));
+            return;
+        }
+        if (std::filesystem::equivalent(targetDir, outputDir, ec)) {
+            QMessageBox::warning(this, tr("FSW"),
+                tr("Input and output folders must be different."));
+            return;
+        }
+
         fsw->start();
         ui.buttonFSW->setText("Turn FSW off");
         ui.pushButtonDT->setEnabled(false);
@@ -248,7 +258,10 @@ void mainWindow::onSettingsClicked() {
     this->targetDir = stdTargetDir;
     this->outputDir = stdOutputDir;
 
+    delete fsw;
     fsw = new FileSystemWatcher(targetDir, outputDir);
+    if (encAlg)
+        fsw->setEncryptionStrategy(encAlg);
 
     ui.pushButtonDT->setEnabled(true);
     ui.pushButtonA52->setEnabled(true);

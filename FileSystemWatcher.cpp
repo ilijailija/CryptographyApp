@@ -19,7 +19,7 @@ void FileSystemWatcher::watch() {
 				if (existing_files.find(filePath) == existing_files.end()) {
 					existing_files.insert(filePath);
 
-					ifstream is(filePath);
+					ifstream is(filePath, ios::binary);
 					stringstream buffer;
 					buffer << is.rdbuf();
 					string fileContent = buffer.str();
@@ -28,7 +28,7 @@ void FileSystemWatcher::watch() {
 					string encrypted = encStrategy->encrypt(fileContent);
 
 					auto outputFilePath = outputDir / entry.path().filename();
-					ofstream os(outputFilePath);
+					ofstream os(outputFilePath, ios::binary);
 					os << encrypted;
 					os.close();
 

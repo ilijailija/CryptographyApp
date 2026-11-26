@@ -30,7 +30,7 @@ class FileSystemWatcher
 public:
 
 	FileSystemWatcher(fs::path target, fs::path output)
-		:targetDir(target), outputDir(output), running(false) {}
+		: encStrategy(nullptr), targetDir(target), outputDir(output), running(false) {}
 	~FileSystemWatcher() {
 		stop();
 	}
