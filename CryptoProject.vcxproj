@@ -126,7 +126,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;C:\Qt\6.9.3\msvc2022_64\include\QtWidgets;C:\Qt\6.9.3\msvc2022_64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\crypto;$(ProjectDir)src\network;$(ProjectDir)src\watcher;$(ProjectDir)src\gui;$(ProjectDir)ui;GeneratedFiles\$(ConfigurationName);GeneratedFiles;C:\Qt\6.9.3\msvc2022_64\include\QtWidgets;C:\Qt\6.9.3\msvc2022_64\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -149,7 +149,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>C:\Qt\6.9.3\msvc2022_64\include\QtWidgets;C:\Qt\6.9.3\msvc2022_64\include\QtGui;C:\Qt\6.9.3\msvc2022_64\include\QtCore;C:\Qt\6.9.3\msvc2022_64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\crypto;$(ProjectDir)src\network;$(ProjectDir)src\watcher;$(ProjectDir)src\gui;$(ProjectDir)ui;C:\Qt\6.9.3\msvc2022_64\include\QtWidgets;C:\Qt\6.9.3\msvc2022_64\include\QtGui;C:\Qt\6.9.3\msvc2022_64\include\QtCore;C:\Qt\6.9.3\msvc2022_64\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,42 +161,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="A52.cpp" />
-    <ClCompile Include="A52KeyDialog.cpp" />
-    <ClCompile Include="CFB.cpp" />
-    <ClCompile Include="CfbDialog.cpp" />
-    <ClCompile Include="Client.cpp" />
-    <ClCompile Include="CryptoProject.cpp" />
-    <ClCompile Include="DoubleTranspositionCipher.cpp" />
-    <ClCompile Include="DtKeyDialog.cpp" />
-    <ClCompile Include="FileDialog.cpp" />
-    <ClCompile Include="FileSystemWatcher.cpp" />
-    <ClCompile Include="mainWindow.cpp" />
-    <ClCompile Include="MD5Alg.cpp" />
-    <ClCompile Include="Server.cpp" />
-    <ClCompile Include="SettingsWidget.cpp" />
+    <ClCompile Include="src\crypto\A52.cpp" />
+    <ClCompile Include="src\gui\A52KeyDialog.cpp" />
+    <ClCompile Include="src\crypto\CFB.cpp" />
+    <ClCompile Include="src\gui\CfbDialog.cpp" />
+    <ClCompile Include="src\network\Client.cpp" />
+    <ClCompile Include="src\CryptoProject.cpp" />
+    <ClCompile Include="src\crypto\DoubleTranspositionCipher.cpp" />
+    <ClCompile Include="src\gui\DtKeyDialog.cpp" />
+    <ClCompile Include="src\gui\FileDialog.cpp" />
+    <ClCompile Include="src\watcher\FileSystemWatcher.cpp" />
+    <ClCompile Include="src\gui\mainWindow.cpp" />
+    <ClCompile Include="src\crypto\MD5Alg.cpp" />
+    <ClCompile Include="src\network\Server.cpp" />
+    <ClCompile Include="src\gui\SettingsWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="A52.h" />
-    <QtMoc Include="SettingsWidget.h" />
-    <ClInclude Include="ui_mainWindow2.h" />
-    <ClInclude Include="ui_settings.h" />
-    <QtMoc Include="A52KeyDialog.h" />
-    <ClInclude Include="A52Wrapper.h" />
-    <ClInclude Include="CFB.h" />
-    <QtMoc Include="CfbDialog.h" />
-    <ClInclude Include="Client.h" />
-    <ClInclude Include="DoubleTranspositionCipher.h" />
-    <QtMoc Include="DtKeyDialog.h" />
-    <ClInclude Include="EncryptionStrategy.h" />
-    <QtMoc Include="FileDialog.h" />
-    <ClInclude Include="FileSystemWatcher.h" />
-    <ClInclude Include="ui_enterA52Key.h" />
-    <ClInclude Include="ui_enterCfbKey.h" />
-    <ClInclude Include="ui_enterDtKey.h" />
-    <ClInclude Include="ui_manualDialog.h" />
-    <QtMoc Include="mainWindow.h" />
-    <ClInclude Include="Server.h" />
+    <ClInclude Include="src\crypto\A52.h" />
+    <QtMoc Include="src\gui\SettingsWidget.h" />
+    <ClInclude Include="ui\ui_mainWindow2.h" />
+    <ClInclude Include="ui\ui_settings.h" />
+    <QtMoc Include="src\gui\A52KeyDialog.h" />
+    <ClInclude Include="src\crypto\A52Wrapper.h" />
+    <ClInclude Include="src\crypto\CFB.h" />
+    <QtMoc Include="src\gui\CfbDialog.h" />
+    <ClInclude Include="src\network\Client.h" />
+    <ClInclude Include="src\crypto\DoubleTranspositionCipher.h" />
+    <QtMoc Include="src\gui\DtKeyDialog.h" />
+    <ClInclude Include="src\crypto\EncryptionStrategy.h" />
+    <QtMoc Include="src\gui\FileDialog.h" />
+    <ClInclude Include="src\watcher\FileSystemWatcher.h" />
+    <ClInclude Include="ui\ui_enterA52Key.h" />
+    <ClInclude Include="ui\ui_enterCfbKey.h" />
+    <ClInclude Include="ui\ui_enterDtKey.h" />
+    <ClInclude Include="ui\ui_manualDialog.h" />
+    <QtMoc Include="src\gui\mainWindow.h" />
+    <ClInclude Include="src\network\Server.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />

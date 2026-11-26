@@ -15,110 +15,110 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CryptoProject.cpp">
+    <ClCompile Include="src\CryptoProject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DoubleTranspositionCipher.cpp">
+    <ClCompile Include="src\crypto\DoubleTranspositionCipher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="A52.cpp">
+    <ClCompile Include="src\crypto\A52.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileSystemWatcher.cpp">
+    <ClCompile Include="src\watcher\FileSystemWatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Server.cpp">
+    <ClCompile Include="src\network\Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Client.cpp">
+    <ClCompile Include="src\network\Client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MD5Alg.cpp">
+    <ClCompile Include="src\crypto\MD5Alg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainWindow.cpp">
+    <ClCompile Include="src\gui\mainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileDialog.cpp">
+    <ClCompile Include="src\gui\FileDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DtKeyDialog.cpp">
+    <ClCompile Include="src\gui\DtKeyDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="A52KeyDialog.cpp">
+    <ClCompile Include="src\gui\A52KeyDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CFB.cpp">
+    <ClCompile Include="src\crypto\CFB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CfbDialog.cpp">
+    <ClCompile Include="src\gui\CfbDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SettingsWidget.cpp">
+    <ClCompile Include="src\gui\SettingsWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DoubleTranspositionCipher.h">
+    <ClInclude Include="src\crypto\DoubleTranspositionCipher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="A52.h">
+    <ClInclude Include="src\crypto\A52.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileSystemWatcher.h">
+    <ClInclude Include="src\watcher\FileSystemWatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EncryptionStrategy.h">
+    <ClInclude Include="src\crypto\EncryptionStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Server.h">
+    <ClInclude Include="src\network\Server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Client.h">
+    <ClInclude Include="src\network\Client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui_manualDialog.h">
+    <ClInclude Include="ui\ui_manualDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui_enterDtKey.h">
+    <ClInclude Include="ui\ui_enterDtKey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui_enterA52Key.h">
+    <ClInclude Include="ui\ui_enterA52Key.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="A52Wrapper.h">
+    <ClInclude Include="src\crypto\A52Wrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CFB.h">
+    <ClInclude Include="src\crypto\CFB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui_enterCfbKey.h">
+    <ClInclude Include="ui\ui_enterCfbKey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui_settings.h">
+    <ClInclude Include="ui\ui_settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui_mainWindow2.h">
+    <ClInclude Include="ui\ui_mainWindow2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="mainWindow.h">
+    <QtMoc Include="src\gui\mainWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="FileDialog.h">
+    <QtMoc Include="src\gui\FileDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="DtKeyDialog.h">
+    <QtMoc Include="src\gui\DtKeyDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="A52KeyDialog.h">
+    <QtMoc Include="src\gui\A52KeyDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="CfbDialog.h">
+    <QtMoc Include="src\gui\CfbDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="SettingsWidget.h">
+    <QtMoc Include="src\gui\SettingsWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
